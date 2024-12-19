@@ -27,7 +27,7 @@ int main() {
     //free(chars);
 
     printf(chars);
-    (*funptr)(1);
+    (*funptr)(2);
     return 0;
 
 }
