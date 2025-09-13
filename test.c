@@ -18,6 +18,14 @@ int main() {
 
     scanf("%13c", chars + 5);
 
+    for (int i = 0; i < 20; i++) {
+
+        if (*(chars + i) == 0x0a) {
+            *(chars + i) = 0x20;
+        }
+
+    }
+
 //     srand(1);
 //
 //     for (int i = 0; i < 9; i++) {
@@ -27,7 +35,7 @@ int main() {
     //free(chars);
 
     printf(chars);
-    (*funptr)(2);
+    funptr(2);
     return 0;
 
 }
