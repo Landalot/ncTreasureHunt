@@ -21,26 +21,42 @@ int main() {
     initscr();
     noecho();
     curs_set(FALSE);
+    timeout(0);
 
-    start_color();
-    init_pair(1, COLOR_BLUE, COLOR_BLACK);
-    init_pair(2, COLOR_GREEN, COLOR_BLACK);
-    init_pair(3, COLOR_RED, COLOR_BLACK);
-    init_pair(4, COLOR_CYAN, COLOR_BLACK);
+    char inChar;
 
-    for (int i = 1; i <= 4; i++) {
+    int x, y;
+    x = 0;
+    y = 0;
 
-        attrset(COLOR_PAIR(i));
-        helloWorld();
-        clear();
+    while(1) {
+
+        inChar = getch();
+
+        switch(inChar) {
+
+            case 'a': x--; break;
+            case 'd': x++; break;
+            case 's': y--; break;
+            case 'w': y++; break;
+
+        }
+
+        move(10, 10);
+        printw("X: %d Y: %d", x, y);
+
         refresh();
-        attroff(COLOR_PAIR(i));
+        napms(50);
+        clear();
+
+        if (x <= -10 && y <= -10) {
+            refresh();
+            break;
+        }
 
     }
 
-    move(30, 10);
-    printw("%d", 100);
-    refresh();
+
 
     sleep(2);
 
