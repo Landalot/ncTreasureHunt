@@ -37,19 +37,19 @@ int main() {
 
             case 'a': x--; break;
             case 'd': x++; break;
-            case 's': y--; break;
-            case 'w': y++; break;
+            case 's': y++; break;
+            case 'w': y--; break;
 
         }
 
-        move(10, 10);
+        move(y, x);
         printw("X: %d Y: %d", x, y);
 
         refresh();
         napms(50);
         clear();
 
-        if (x <= -10 && y <= -10) {
+        if (x < 0 || y < 0) {
             refresh();
             break;
         }
@@ -58,7 +58,7 @@ int main() {
 
 
 
-    sleep(2);
+    sleep(1);
 
     endwin();
     return 0;
