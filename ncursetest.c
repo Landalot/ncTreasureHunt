@@ -16,6 +16,22 @@ void helloWorld() {
 
 }
 
+void wrapAround(int *x, int *y) {
+    if (*y >= LINES) {
+        *y = *y % LINES;
+    } else if (*y < 0) {
+        *y = LINES + (*y % LINES);
+    }
+
+    int xLimit = COLS - 15;
+
+    if (*x >= xLimit) {
+        *x = *x % xLimit;
+    } else if (*x < 0) {
+        *x = xLimit + (*x % xLimit);
+    }
+}
+
 int main() {
 
     initscr();
@@ -44,25 +60,13 @@ int main() {
 
         }
 
-        if (y >= LINES) {
-            y = y % LINES;
-        } else if (y < 0) {
-            y = LINES + (y % LINES);
-        }
-
-        int xLimit = COLS - 10;
-
-        if (x >= xLimit) {
-            x = x % xLimit;
-        } else if (x < 0) {
-            x = xLimit + (x % xLimit);
-        }
+        wrapAround(&x,&y);
 
         move(y, x);
         printw("X: %d Y: %d", x, y);
 
         refresh();
-        napms(50);
+        napms(10);
         clear();
 
     }
