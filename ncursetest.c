@@ -56,7 +56,7 @@ int main() {
             case 'd': x++; break;
             case 's': y++; break;
             case 'w': y--; break;
-            case 'c': exitFlag = 1; break;
+            case 27: exitFlag = 1; break;
 
         }
 
@@ -73,8 +73,6 @@ int main() {
 
 
     refresh();
-    sleep(1);
-
     endwin();
     return 0;
 }
