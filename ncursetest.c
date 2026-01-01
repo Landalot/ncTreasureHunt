@@ -25,11 +25,12 @@ int main() {
 
     char inChar;
 
-    int x, y;
+    int x, y, exitFlag;
     x = 0;
     y = 0;
+    exitFlag = 0;
 
-    while(1) {
+    while(exitFlag == 0) {
 
         inChar = getch();
 
@@ -39,7 +40,22 @@ int main() {
             case 'd': x++; break;
             case 's': y++; break;
             case 'w': y--; break;
+            case 'c': exitFlag = 1; break;
 
+        }
+
+        if (y >= LINES) {
+            y = y % LINES;
+        } else if (y < 0) {
+            y = LINES + (y % LINES);
+        }
+
+        int xLimit = COLS - 10;
+
+        if (x >= xLimit) {
+            x = x % xLimit;
+        } else if (x < 0) {
+            x = xLimit + (x % xLimit);
         }
 
         move(y, x);
@@ -49,15 +65,10 @@ int main() {
         napms(50);
         clear();
 
-        if (x < 0 || y < 0) {
-            refresh();
-            break;
-        }
-
     }
 
 
-
+    refresh();
     sleep(1);
 
     endwin();
