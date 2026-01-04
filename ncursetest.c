@@ -6,21 +6,6 @@ struct coord {
     int y;
 };
 
-void helloWorld() {
-
-    for (int i = 0; i < 10; i++) {
-
-        move(10 + 2*i,10);
-        addstr("Hello World!");
-        move(11 + 2*i,10);
-        addstr("How are you doing?");
-        refresh();
-        napms(120);
-
-    }
-
-}
-
 void wrapAround(struct coord *pos) {
     if (pos->y >= LINES) {
         pos->y = pos->y % LINES;
