@@ -66,7 +66,7 @@ int main() {
         printw("X: %d Y: %d", x, y);
 
         refresh();
-        napms(10);
+        napms(25);
         clear();
 
     }
