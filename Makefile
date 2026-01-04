@@ -4,9 +4,6 @@ ncursetest: ncursetest.c
 ncursetest_debug: ncursetest.c
 	gcc nctreasurehunt.c -lncurses -o nctreasurehunt -g
 
-test: test.c
-	gcc test.c -o test
-
 .PHONY: clean
 
 clean:
