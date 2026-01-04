@@ -1,6 +1,11 @@
 #include <ncurses.h>
 #include <unistd.h>
 
+struct coord {
+    int x;
+    int y;
+};
+
 void helloWorld() {
 
     for (int i = 0; i < 10; i++) {
@@ -16,19 +21,19 @@ void helloWorld() {
 
 }
 
-void wrapAround(int *x, int *y) {
-    if (*y >= LINES) {
-        *y = *y % LINES;
-    } else if (*y < 0) {
-        *y = LINES + (*y % LINES);
+void wrapAround(struct coord *pos) {
+    if (pos->y >= LINES) {
+        pos->y = pos->y % LINES;
+    } else if (pos->y < 0) {
+        pos->y = LINES + (pos->y % LINES);
     }
 
     int xLimit = COLS - 15;
 
-    if (*x >= xLimit) {
-        *x = *x % xLimit;
-    } else if (*x < 0) {
-        *x = xLimit + (*x % xLimit);
+    if (pos->x >= xLimit) {
+        pos->x = pos->x % xLimit;
+    } else if (pos->x < 0) {
+        pos->x = xLimit + (pos->x % xLimit);
     }
 }
 
@@ -41,10 +46,8 @@ int main() {
 
     char inChar;
 
-    int x, y, exitFlag;
-    x = 0;
-    y = 0;
-    exitFlag = 0;
+    struct coord playerPos = {0,0};
+    int exitFlag = 0;
 
     while(exitFlag == 0) {
 
@@ -52,18 +55,18 @@ int main() {
 
         switch(inChar) {
 
-            case 'a': x--; break;
-            case 'd': x++; break;
-            case 's': y++; break;
-            case 'w': y--; break;
+            case 'a': playerPos.x--; break;
+            case 'd': playerPos.x++; break;
+            case 's': playerPos.y++; break;
+            case 'w': playerPos.y--; break;
             case 27: exitFlag = 1; break;
 
         }
 
-        wrapAround(&x,&y);
+        wrapAround(&playerPos);
 
-        move(y, x);
-        printw("X: %d Y: %d", x, y);
+        move(playerPos.y, playerPos.x);
+        printw("X: %d Y: %d", playerPos.x, playerPos.y);
 
         refresh();
         napms(25);
