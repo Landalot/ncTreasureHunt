@@ -1,15 +1,15 @@
 ncursetest: ncursetest.c
-	gcc ncursetest.c -lncurses -o ncursetest
+	gcc nctreasurehunt.c -lncurses -o nctreasurehunt
 
 ncursetest_debug: ncursetest.c
-	gcc ncursetest.c -lncurses -o ncursetest -g
+	gcc nctreasurehunt.c -lncurses -o nctreasurehunt -g
 
-test: ncursetest.c
+test: test.c
 	gcc test.c -o test
 
 .PHONY: clean
 
 clean:
 	-@rm -f test
-	-@rm -f ncursetest
+	-@rm -f nctreasurehunt
 	-@rf -f *.o
