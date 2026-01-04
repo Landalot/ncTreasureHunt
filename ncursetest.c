@@ -1,5 +1,10 @@
 #include <ncurses.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define X_LIMIT 50
+#define Y_LIMIT 20
 
 struct coord {
     int x;
@@ -7,19 +12,46 @@ struct coord {
 };
 
 void wrapAround(struct coord *pos) {
-    if (pos->y >= LINES) {
-        pos->y = pos->y % LINES;
+
+    int xLimit = 30;
+    int yLimit = 20;
+
+    if (pos->y >= Y_LIMIT) {
+        pos->y = pos->y % Y_LIMIT;
     } else if (pos->y < 0) {
-        pos->y = LINES + (pos->y % LINES);
+        pos->y = Y_LIMIT + (pos->y % Y_LIMIT);
     }
 
-    int xLimit = COLS - 15;
-
-    if (pos->x >= xLimit) {
-        pos->x = pos->x % xLimit;
+    if (pos->x >= X_LIMIT) {
+        pos->x = pos->x % X_LIMIT;
     } else if (pos->x < 0) {
-        pos->x = xLimit + (pos->x % xLimit);
+        pos->x = X_LIMIT + (pos->x % X_LIMIT);
     }
+}
+
+void generateBorder() {
+    for (int i = 0; i <= Y_LIMIT; i++) {
+        move(i,X_LIMIT);
+        printw("|");
+    }
+
+    for (int i = 0; i < X_LIMIT; i++) {
+        move(Y_LIMIT,i);
+        printw("0");
+    }
+}
+
+struct coord generateTreasure() {
+
+    struct coord treasurePos;
+
+    srand(time(0));
+    treasurePos.x = rand(); treasurePos.y = rand();
+
+    wrapAround(&treasurePos);
+
+    return treasurePos;
+
 }
 
 int main() {
@@ -32,9 +64,17 @@ int main() {
     char inChar;
 
     struct coord playerPos = {0,0};
-    int exitFlag = 0;
+    struct coord treasurePos;
+    char exitFlag = 0;
+    char treasureFlag = 0;
+    int score = 0;
 
     while(exitFlag == 0) {
+
+        if (treasureFlag == 0) {
+            treasurePos = generateTreasure();
+            treasureFlag = 1;
+        }
 
         inChar = getch();
 
@@ -50,8 +90,23 @@ int main() {
 
         wrapAround(&playerPos);
 
+        if (treasureFlag == 1 && playerPos.x == treasurePos.x && playerPos.y == treasurePos.y) {
+            treasureFlag = 0;
+            score++;
+        }
+
+        generateBorder();
+
         move(playerPos.y, playerPos.x);
-        printw("X: %d Y: %d", playerPos.x, playerPos.y);
+        printw("@");
+
+        if (treasureFlag == 1) {
+            move(treasurePos.y, treasurePos.x);
+            printw("X");
+        }
+
+        move(0, COLS - 10);
+        printw("Score: %d",score);
 
         refresh();
         napms(25);
