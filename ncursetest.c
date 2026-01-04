@@ -3,41 +3,46 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define X_LIMIT 50
-#define Y_LIMIT 20
+#define X_LIMIT 10
+#define Y_LIMIT 10
 
 struct coord {
     int x;
     int y;
 };
 
-void wrapAround(struct coord *pos) {
-
-    int xLimit = 30;
-    int yLimit = 20;
-
-    if (pos->y >= Y_LIMIT) {
-        pos->y = pos->y % Y_LIMIT;
-    } else if (pos->y < 0) {
-        pos->y = Y_LIMIT + (pos->y % Y_LIMIT);
-    }
-
-    if (pos->x >= X_LIMIT) {
-        pos->x = pos->x % X_LIMIT;
-    } else if (pos->x < 0) {
-        pos->x = X_LIMIT + (pos->x % X_LIMIT);
-    }
-}
-
 void generateBorder() {
-    for (int i = 0; i <= Y_LIMIT; i++) {
-        move(i,X_LIMIT);
+
+    move(0,0);
+    printw("0");
+
+    for (int i = 1; i <= X_LIMIT; i++) {
+        move(0,i);
+        printw("-");
+    }
+
+    move(0,X_LIMIT+1);
+    printw("0");
+
+    for (int i = 1; i <= Y_LIMIT; i++) {
+        move(i,X_LIMIT+1);
         printw("|");
     }
 
-    for (int i = 0; i < X_LIMIT; i++) {
-        move(Y_LIMIT,i);
-        printw("0");
+    move(Y_LIMIT+1,X_LIMIT+1);
+    printw("0");
+
+    for (int i = 1; i <= X_LIMIT; i++) {
+        move(Y_LIMIT + 1,i);
+        printw("-");
+    }
+
+    move(Y_LIMIT+1,0);
+    printw("0");
+
+    for (int i = 1; i <= Y_LIMIT; i++) {
+        move(i,0);
+        printw("|");
     }
 }
 
@@ -46,12 +51,27 @@ struct coord generateTreasure() {
     struct coord treasurePos;
 
     srand(time(0));
-    treasurePos.x = rand(); treasurePos.y = rand();
-
-    wrapAround(&treasurePos);
+    treasurePos.x = rand()%X_LIMIT + 1; treasurePos.y = rand()%Y_LIMIT + 1;
 
     return treasurePos;
 
+}
+
+void constrainPlayer(struct coord *pos) {
+
+    if (pos->x > X_LIMIT) {
+        pos->x = X_LIMIT;
+    }
+    if (pos->x < 1) {
+        pos->x = 1;
+    }
+
+    if (pos->y > Y_LIMIT) {
+        pos->y = Y_LIMIT;
+    }
+    if (pos->y < 1) {
+        pos->y = 1;
+    }
 }
 
 int main() {
@@ -88,7 +108,7 @@ int main() {
 
         }
 
-        wrapAround(&playerPos);
+        constrainPlayer(&playerPos);
 
         if (treasureFlag == 1 && playerPos.x == treasurePos.x && playerPos.y == treasurePos.y) {
             treasureFlag = 0;
