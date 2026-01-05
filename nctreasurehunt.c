@@ -104,7 +104,7 @@ int main() {
             case 'd': playerPos.x++; break;
             case 's': playerPos.y++; break;
             case 'w': playerPos.y--; break;
-            case 27: exitFlag = 1; break;
+            case 'c': exitFlag = 1; break;
 
         }
 
@@ -127,6 +127,9 @@ int main() {
 
         move(0, X_LIMIT+3);
         printw("Score: %d",score);
+
+        move(1, X_LIMIT+3);
+        printw("Press c to exit!");
 
         refresh();
         napms(25);
