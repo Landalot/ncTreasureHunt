@@ -125,7 +125,7 @@ int main() {
             printw("X");
         }
 
-        move(0, COLS - 10);
+        move(0, X_LIMIT+3);
         printw("Score: %d",score);
 
         refresh();
