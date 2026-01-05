@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define X_LIMIT 10
-#define Y_LIMIT 10
+#define X_LIMIT 5
+#define Y_LIMIT 5
 
 struct coord {
     int x;
@@ -50,7 +50,6 @@ struct coord generateTreasure() {
 
     struct coord treasurePos;
 
-    srand(time(0));
     treasurePos.x = rand()%X_LIMIT + 1; treasurePos.y = rand()%Y_LIMIT + 1;
 
     return treasurePos;
@@ -76,6 +75,7 @@ void constrainPlayer(struct coord *pos) {
 
 int main() {
 
+    srand(time(0));
     initscr();
     noecho();
     curs_set(FALSE);
