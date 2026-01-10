@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define X_LIMIT 5
-#define Y_LIMIT 5
+#define X_LIMIT 20
+#define Y_LIMIT 20
+#define TREASURE_COUNT 10
 
 struct coord {
     int x;
@@ -78,22 +79,29 @@ int main() {
     srand(time(0));
     initscr();
     noecho();
+    nodelay(stdscr,TRUE);
     curs_set(FALSE);
     timeout(0);
 
     char inChar;
 
     struct coord playerPos = {0,0};
-    struct coord treasurePos;
     char exitFlag = 0;
-    char treasureFlag = 0;
     int score = 0;
+
+    struct coord **treasureArray = (struct coord **)malloc(sizeof(struct coord *)*TREASURE_COUNT);
+
+    for (int i = 0; i < TREASURE_COUNT; i++) {
+        *(treasureArray + i) = NULL;
+    }
 
     while(exitFlag == 0) {
 
-        if (treasureFlag == 0) {
-            treasurePos = generateTreasure();
-            treasureFlag = 1;
+        for (int i = 0; i < TREASURE_COUNT; i++) {
+            if (*(treasureArray + i) == NULL) {
+                *(treasureArray + i) = (struct coord *)malloc(sizeof(struct coord));
+                (*(treasureArray + i))->x = rand()%X_LIMIT + 1; (*(treasureArray + i))->y = rand()%Y_LIMIT + 1;
+            }
         }
 
         inChar = getch();
@@ -108,11 +116,19 @@ int main() {
 
         }
 
+        flushinp();
+
         constrainPlayer(&playerPos);
 
-        if (treasureFlag == 1 && playerPos.x == treasurePos.x && playerPos.y == treasurePos.y) {
-            treasureFlag = 0;
-            score++;
+        for (int i = 0; i < TREASURE_COUNT; i++) {
+            if (*(treasureArray + i) != NULL &&
+                playerPos.x == (*(treasureArray + i))->x &&
+                playerPos.y == (*(treasureArray + i))->y)
+            {
+                free(*(treasureArray + i));
+                *(treasureArray + i) = NULL;
+                score++;
+            }
         }
 
         generateBorder();
@@ -120,9 +136,11 @@ int main() {
         move(playerPos.y, playerPos.x);
         printw("@");
 
-        if (treasureFlag == 1) {
-            move(treasurePos.y, treasurePos.x);
-            printw("X");
+        for (int i = 0; i < TREASURE_COUNT; i++) {
+            if (*(treasureArray + i) != NULL) {
+                move((*(treasureArray + i))->y, (*(treasureArray + i))->x);
+                printw("X");
+            }
         }
 
         move(0, X_LIMIT+3);
@@ -137,6 +155,13 @@ int main() {
 
     }
 
+    for (int i = 0; i < 3; i++) {
+        if (*(treasureArray + i) != NULL) {
+            free(*(treasureArray + i));
+        }
+    }
+
+    free(treasureArray);
 
     refresh();
     endwin();
