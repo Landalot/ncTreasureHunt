@@ -10,7 +10,7 @@ Optional: Clean up compiled files by running:
 
 ncTreasureHunt can be ran by typing the following command:
 
-    ./ncursetest
+    ./nctreasurehunt
 
 Press the WASD keys to move. Press c to exit.
 Gather as much treasure as possible by moving over the X symbols!
