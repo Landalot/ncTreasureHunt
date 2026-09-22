@@ -147,7 +147,11 @@ int main() {
         printw("Score: %d",score);
 
         move(1, X_LIMIT+3);
+        printw("Press the WASD keys to move!");
+        move(2, X_LIMIT+3);
         printw("Press c to exit!");
+        move(3, X_LIMIT+3);
+        printw("Gather treasure by moving over X!");
 
         refresh();
         napms(25);
